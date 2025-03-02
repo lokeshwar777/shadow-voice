@@ -1,3 +1,4 @@
+'use client';
 import Link from "next/link";
 
 export default function LandingPage() {
@@ -17,7 +18,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center justify-center flex-grow">
                 <h1 className="text-4xl font-extrabold mb-3">Shadow Voice</h1>
                 <p className="text-gray-400 mb-6 text-center max-w-md">
-                    Connect anonymously. Speak freely. Stay private.
+                    Connect anonymously. Speak freely. Stay privately.
                 </p>
                 <div className="flex space-x-4">
                     <a href="/login"
@@ -30,13 +31,13 @@ export default function LandingPage() {
                     </a>
                 </div>
             </div>
-            <footer className="w-full py-1 bg-gray-900 text-gray-400 text-center bg-opacity-60">
-                <div className="flex flex-wrap justify-center gap-4">
-                    <Link href="footer/about/" className="hover:text-white transition">About</Link>
-                    <Link href="footer/cookie/" className="hover:text-white transition">Cookie Policy</Link>
-                    <Link href="footer/privacy/" className="hover:text-white transition">Privacy Policy</Link>
-                    <Link href="footer/Terms/" className="hover:text-white transition">Terms of Service</Link>
-                    <Link href="footer/contact/" className="hover:text-white transition">Contact Us</Link>
+            <footer className="absolute bottom-2 w-full text-center text-gray-400 text-sm">
+                <div className="flex justify-center space-x-4">
+                    <Link href="/footer/about/" className="hover:text-white transition">About</Link>
+                    <Link href="/footer/cookie/" className="hover:text-white transition">Cookie Policy</Link>
+                    <Link href="/footer/privacy/" className="hover:text-white transition">Privacy Policy</Link>
+                    <Link href="/footer/Terms/" className="hover:text-white transition">Terms of Service</Link>
+                    <Link href="/footer/contact/" className="hover:text-white transition">Contact Us</Link>
                     <p className="mt-1 justify-center">&copy; {new Date().getFullYear()} Shadow Voice. All rights
                         reserved.</p>
                 </div>

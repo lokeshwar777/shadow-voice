@@ -24,7 +24,7 @@ const ShadowVoiceLanding = () => {
             </video>
 
             {/* Content Wrapper */}
-            <div className="flex flex-grow items-center justify-center  bg-opacity-50">
+            <div className="flex flex-grow items-center bg-black-400 z-0 justify-center  bg-opacity-50">
                 <div
                     className="w-full max-w-md p-6 bg-gray-900 bg-opacity-75 rounded-lg shadow-lg flex flex-col items-center">
                     {/* Left-aligned text */}
@@ -104,14 +104,15 @@ const ShadowVoiceLanding = () => {
             )}
 
             {/* Footer */}
-            <footer className="w-full py-1 bg-gray-900 text-gray-400 text-center bg-opacity-60">
-                <div className="flex flex-wrap justify-center gap-4">
+            <footer className="absolute bottom-2 w-full text-center text-gray-400 text-sm">
+                <div className="flex justify-center space-x-4">
                     <Link href="/footer/about/" className="hover:text-white transition">About</Link>
                     <Link href="/footer/cookie/" className="hover:text-white transition">Cookie Policy</Link>
                     <Link href="/footer/privacy/" className="hover:text-white transition">Privacy Policy</Link>
                     <Link href="/footer/Terms/" className="hover:text-white transition">Terms of Service</Link>
                     <Link href="/footer/contact/" className="hover:text-white transition">Contact Us</Link>
-                    <p className="mt-1">&copy; {new Date().getFullYear()} -------. All rights reserved.</p>
+                    <p className="mt-1 justify-center">&copy; {new Date().getFullYear()} Shadow Voice. All rights
+                        reserved.</p>
                 </div>
             </footer>
         </div>
