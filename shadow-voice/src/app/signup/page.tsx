@@ -27,9 +27,9 @@ const ShadowVoiceLanding = () => {
                     className="w-full max-w-md p-6 bg-gray-900 bg-opacity-75 rounded-lg shadow-lg flex flex-col items-center">
                     {/* Left-aligned text */}
                     <div className="w-full text-left mb-3">
-                        <h1 className="text-5xl font-roboto font-bold m-2 p-2">Tell the world</h1>
-                        <p className="text-3xl font-roboto font-bold text-white m-2 p-2">with a Veil</p>
-                        <p className="text-gray-400 m-2 p-2">Join Now</p>
+                        <h1 className="text-4xl font-roboto font-bold m-1 p-1">Where Echoes remain</h1>
+                        <p className="text-3xl font-roboto font-bold text-white m-2 p-2">Talk from shadows</p>
+                        <p className="text-2xl text-gray-400 m-2 p-2">Join Now</p>
                     </div>
 
                     {/* Signup Options */}
