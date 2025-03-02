@@ -15,14 +15,16 @@ const ShadowVoiceLanding = () => {
                 autoPlay
                 loop
                 muted
-                className="absolute inset-0 w-full h-full object-cover z-[-1]"
+                playsInline
+                preload="auto"
+                className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
             >
                 <source src="/bg.mp4" type="video/mp4"/>
                 Your browser does not support the video tag.
             </video>
 
             {/* Content Wrapper */}
-            <div className="flex flex-grow items-center justify-center bg-black bg-opacity-50">
+            <div className="flex flex-grow items-center justify-center  bg-opacity-50">
                 <div
                     className="w-full max-w-md p-6 bg-gray-900 bg-opacity-75 rounded-lg shadow-lg flex flex-col items-center">
                     {/* Left-aligned text */}
