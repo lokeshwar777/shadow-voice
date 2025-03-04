@@ -17,13 +17,13 @@ export default function Signup() {
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-black text-white">
-            <div className="relative w-full max-w-7/15 p-8 bg-gray-900 bg-opacity-80 rounded-lg shadow-lg flex flex-col">
-                <div className="flex flex-col absolute top-4 left-4">
-                    <h1 className="text-2xl font-bold text-white italic font-extrabold tracking-wider">SHADOW VOICE</h1>
-                    <h2 className="text-3xl font-bold mt-2">Sign up</h2>
-                    <p className="text-gray-400 pt-1">Create your account</p>
+            <div className="relative w-full max-w-7/15 bg-gray-900 p-8 bg-opacity-80 rounded-lg shadow-lg flex flex-col">
+                <div className="flex flex-col pl-4 pt-5 absolute top-4 left-4">
+                    <h1 className="text-4xl font-bold text-white italic font-extrabold tracking-wider">SHADOW VOICE</h1>
+                    <h2 className="text-3xl font-bold text-gray-350 mt-4">Sign up</h2>
+                    <p className="text-gray-400 font-bold pt-4">Create your account</p>
                 </div>
-                <div className="w-full ml-60 mt-5">
+                <div className="w-full ml-120 mt-5">
                     <form onSubmit={handleSubmit} className="mt-6">
                         <div className="mb-4">
                             <label className="block text-sm font-medium">Email</label>
@@ -33,7 +33,7 @@ export default function Signup() {
                                 placeholder="Enter the Email id"
                                 value={form.email}
                                 onChange={handleChange}
-                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-2/3"
+                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-5/15"
                                 required
                             />
                         </div>
@@ -45,7 +45,7 @@ export default function Signup() {
                                 placeholder="Enter the username"
                                 value={form.username}
                                 onChange={handleChange}
-                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-2/3"
+                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-5/15"
                                 required
                             />
                         </div>
@@ -57,24 +57,24 @@ export default function Signup() {
                                 placeholder="Enter the password"
                                 value={form.password}
                                 onChange={handleChange}
-                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-2/3"
+                                className="p-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-5/15"
                                 required
                             />
                         </div>
                         <button
                             type="submit"
-                            className="w-2/3 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md transition"
+                            className="w-2/15 ml-37 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md transition"
                         >
                             SIGN IN
                         </button>
                     </form>
-                    <p className="mt-4 text-gray-400">
-                        Already have an account?{' '}
-                        <Link href="/login/" className="text-blue-400 hover:underline">
-                            Login
-                        </Link>
-                    </p>
                 </div>
+                <p className="mt-2 text-gray-400">
+                    Already have an account?{' '}
+                    <Link href="/login/" className="text-blue-400 hover:underline">
+                        Login
+                    </Link>
+                </p>
             </div>
             <footer className="absolute bottom-2 w-full text-center text-gray-400 text-sm">
                 <div className="flex justify-center space-x-4">
