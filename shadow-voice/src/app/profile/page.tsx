@@ -10,7 +10,7 @@ export default function ProfilePage() {
         <div className="bg-black text-white min-h-screen flex">
             {/* Sidebar */}
             <aside className="w-64 bg-black p-5 border-r border-gray-700">
-                <h1 className="text-2xl font-bold">SHADOW-VOICE</h1>
+                <h1 className="text-2xl font-bold italic ">SHADOW-VOICE</h1>
                 <nav className="mt-6 space-y-4">
                     <a href="#" className="flex items-center space-x-2"><span>🏠</span> <span>Home</span></a>
                     <a href="#" className="flex items-center space-x-2"><span>🔍</span> <span>Search</span></a>
@@ -41,7 +41,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Content Grid */}
-                <div className="grid ml-50 mr-50 grid-cols-3 gap-4 mt-6">
+                <div className="grid ml-50 mr-50 grid-cols-3 gap-1 mt-6">
                     {[...Array(9)].map((_, index) => (
                         <div key={index} className="bg-red-400 text-white py-30 p-2 text-center rounded-md">Post {index + 1}</div>
                     ))}
