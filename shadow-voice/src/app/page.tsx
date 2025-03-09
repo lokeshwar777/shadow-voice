@@ -38,8 +38,7 @@ export default function LandingPage() {
                     <Link href="/footer/privacy/" className="hover:text-white transition">Privacy Policy</Link>
                     <Link href="/footer/Terms/" className="hover:text-white transition">Terms of Service</Link>
                     <Link href="/footer/contact/" className="hover:text-white transition">Contact Us</Link>
-                    <p className="mt-1 justify-center">&copy; {new Date().getFullYear()} Shadow Voice. All rights
-                        reserved.</p>
+                    <p className="justify-center">&copy; {new Date().getFullYear()} Shadow Voice. All rights reserved.</p>
                 </div>
             </footer>
         </div>
