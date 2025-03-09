@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 
 export default function Signup() {
@@ -10,8 +11,20 @@ export default function Signup() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        const result = await signIn("credentials", {
+            redirect: false,
+            username: form.username,
+            password: form.password,
+        });
+
+        if (result?.error) {
+            console.error(result.error);
+        } else {
+            // Redirect to dashboard or another page
+            window.location.href = "/dashboard";
+        }
         console.log(form);
     };
 

@@ -10,9 +10,29 @@ export default function Signup() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log(form);
+        try {
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(form),
+            });
+
+            const data = await response.json();
+            console.log('Response data:', data); // Debugging log
+
+            if (data.success) {
+                window.location.href = '/login';
+            } else {
+                console.error(data.message);
+            }
+        } catch (error) {
+            console.error('Error during sign-up:', error);
+        }
     };
 
     return (
