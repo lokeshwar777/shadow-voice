@@ -18,7 +18,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center justify-center flex-grow">
                 <h1 className="text-4xl font-extrabold mb-3">Shadow Voice</h1>
                 <p className="text-gray-400 mb-6 text-center max-w-md">
-                    Connect anonymously. Speak freely. Stay privately.
+                    Connect anonymously. Speak freely. Stay private.
                 </p>
                 <div className="flex space-x-4">
                     <a href="/login"
