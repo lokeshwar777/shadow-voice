@@ -12,6 +12,7 @@
     "@react-email/components": "^0.0.33",
     "@types/bcryptjs": "^2.4.6",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
     "lightningcss": "^1.29.2",
     "lucide-react": "^0.477.0",
     "mongoose": "^8.12.1",
