@@ -1,6 +1,14 @@
 export default function LandingPage() {
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900">
+            {/* Navbar */}
+            <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
+                <h1 className="text-xl font-bold text-blue-600">Shadow<span className="text-xl font-bold text-blue-400">Voice</span></h1>
+                <button className="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-600">
+                    Login
+                </button>
+            </nav>
+
             {/* Hero Section */}
             <header className="text-center py-16 bg-white shadow-sm">
                 <span className="bg-blue-200 text-black-700 px-3 py-1 rounded-full text-sm font-medium">Welcome to ShadowVoice</span>
