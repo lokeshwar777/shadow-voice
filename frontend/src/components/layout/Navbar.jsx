@@ -18,7 +18,7 @@ const Navbar = () => {
         <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
             <div className="app-container flex h-16 items-center justify-between">
                 <div className="flex items-center gap-6">
-                    <Link to="/" className="text-xl font-bold text-primary">Shadow-Voice</Link>
+                    <Link to="/" className="text-xl font-semibold text-primary">Shadow<span className="font-light">Voice</span></Link>
                     <nav className="hidden md:flex space-x-4">
                         {navItems.map(item => (
                             <Link key={item.path} to={item.path} className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}>
