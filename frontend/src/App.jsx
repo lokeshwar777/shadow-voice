@@ -2,13 +2,14 @@ import { Toaster } from "./components/ui/toaster";
 import { Toaster as Sonner } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 
 // Pages
 import Index from "./pages/Index";
+import Dashboard from "./pages/dashboard";
 import Posts from "./pages/Posts";
 import Polls from "./pages/Polls";
 import Profile from "./pages/Profile";
@@ -20,9 +21,12 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const Layout = ({ children }) => {
+    const location = useLocation();
+    const hideNavbarAndFooter = location.pathname === "/";
+
     return (
         <div className="flex flex-col min-h-screen">
-            <Navbar />
+            {!hideNavbarAndFooter && <Navbar />}
             <main className="flex-1">{children}</main>
             <Footer />
         </div>
@@ -39,6 +43,7 @@ const App = () => (
                     <Layout>
                         <Routes>
                             <Route path="/" element={<Index />} />
+                            <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/posts" element={<Posts />} />
                             <Route path="/polls" element={<Polls />} />
                             <Route path="/profile" element={<Profile />} />
