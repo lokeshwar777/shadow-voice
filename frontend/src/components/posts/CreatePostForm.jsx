@@ -12,7 +12,7 @@ const CreatePostForm = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
-
+    const [aiOpinion, setAiOpinion] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -41,6 +41,8 @@ const CreatePostForm = () => {
     const handleCancel = () => {
         navigate(-1);
     };
+
+   
 
     return (
         <div className="animate-fadeIn">
@@ -79,13 +81,34 @@ const CreatePostForm = () => {
                     </div>
 
                     <form onSubmit={handleSubmit}>
-            <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="What's on your mind?"
-                className="w-full min-h-[150px] p-3 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-
+                        <textarea
+                            value={content}
+                            onChange={(e) => setContent(e.target.value)}
+                            placeholder="What's on your mind?"
+                            className="w-full min-h-[150px] p-3 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                // Simulated AI opinion call
+                                const opinion = content ? `AI thinks your post is great!` : "Please enter some content for AI opinion.";
+                                setAiOpinion(opinion);
+                                toast({
+                                    title: "AI Opinion",
+                                    description: opinion,
+                                });
+                            }}
+                            className="px-4 py-2 border rounded-md bg-grey-400 text-black  hover:bg-blue-600 hover:text-white transition-colors mt-4"
+                        >
+                            Get AI Opinion
+                        </button>
+                        {aiOpinion && (
+                            <textarea
+                                value={aiOpinion}
+                                readOnly
+                                className="w-full min-h-[100px] p-3 mt-4 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            />
+                        )}
                         <div className="flex justify-end items-center gap-3 mt-4">
                             <button
                                 type="button"
