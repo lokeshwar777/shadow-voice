@@ -13,7 +13,7 @@ const CreatePollForm = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
-
+    const [aiOpinion, setAiOpinion] = useState('');
     const handleOptionChange = (index, value) => {
         const newOptions = [...options];
         newOptions[index] = value;
@@ -161,6 +161,28 @@ const CreatePollForm = () => {
                                 <Plus size={16} />
                                 <span>Add Option</span>
                             </button>
+                            <button
+                            type="button"
+                            onClick={() => {
+                                // Simulated AI opinion call
+                                const opinion = question ? `AI thinks your poll is great!` : "Please enter some question for AI opinion.";
+                                setAiOpinion(opinion);
+                                toast({
+                                    title: "AI Opinion",
+                                    description: opinion,
+                                });
+                            }}
+                            className="px-4 py-2 border rounded-md bg-grey-400 text-black  hover:bg-blue-600 hover:text-white transition-colors mt-4"
+                        >
+                            Get AI Opinion
+                        </button>
+                        {aiOpinion && (
+                            <textarea
+                                value={aiOpinion}
+                                readOnly
+                                className="w-full min-h-[100px] p-3 mt-4 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                            />
+                        )}
                         </div>
                         <div className="flex justify-end items-center gap-3 mt-6">
                             <button
