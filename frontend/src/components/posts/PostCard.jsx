@@ -6,11 +6,32 @@ import { cn } from '../../lib/utils';
 
 const PostCard = ({ post }) => {
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(post.likes);
+    const [likeCount, setLikeCount] = useState(post.likes || 0);
+    const [showComments, setShowComments] = useState(false);
+    const [comments, setComments] = useState(post.comments || []);
+    const [newComment, setNewComment] = useState('');
 
     const handleLike = () => {
         setLikeCount(liked ? likeCount - 1 : likeCount + 1);
         setLiked(!liked);
+    };
+
+    const toggleComments = () => {
+        setShowComments((prev) => !prev);
+    };
+
+    const handleCommentSubmit = () => {
+        if (newComment.trim() === '') return;
+
+        const commentData = {
+            id: comments.length + 1,
+            author: post.isAnonymous ? 'Anonymous' : post.author?.name,
+            text: newComment.trim(),
+            createdAt: new Date().toISOString(),
+        };
+
+        setComments([...comments, commentData]);
+        setNewComment('');
     };
 
     const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
@@ -44,18 +65,19 @@ const PostCard = ({ post }) => {
                     onClick={handleLike}
                     className={cn(
                         "flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-colors",
-                        liked
-                            ? "text-primary"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        liked ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                     )}
                 >
                     <ThumbsUp size={16} className={liked ? "fill-primary" : ""} />
                     <span>{likeCount}</span>
                 </button>
 
-                <button className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 px-2 py-1 rounded-md transition-colors">
+                <button
+                    onClick={toggleComments}
+                    className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 px-2 py-1 rounded-md transition-colors"
+                >
                     <MessageSquare size={16} />
-                    <span>{post.comments}</span>
+                    <span>{comments.length}</span>
                 </button>
 
                 <button className="flex items-center gap-1 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 px-2 py-1 rounded-md transition-colors">
@@ -63,6 +85,42 @@ const PostCard = ({ post }) => {
                     <span>Share</span>
                 </button>
             </div>
+
+            {/* Comments Section */}
+            {showComments && (
+                <div className="p-4 border-t">
+                    <h4 className="text-sm font-semibold mb-2">Comments</h4>
+                    <div className="space-y-2">
+                        {comments.length > 0 ? (
+                            comments.map((comment) => (
+                                <div key={comment.id} className="bg-muted p-2 rounded-md">
+                                    <p className="text-xs font-semibold">{comment.author}</p>
+                                    <p className="text-sm">{comment.text}</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="text-xs text-muted-foreground">No comments yet.</p>
+                        )}
+                    </div>
+
+                    {/* Add Comment */}
+                    <div className="mt-3 flex items-center gap-2">
+                        <input
+                            type="text"
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                            className="flex-1 p-2 border rounded-md text-sm"
+                            placeholder="Write a comment..."
+                        />
+                        <button
+                            onClick={handleCommentSubmit}
+                            className="text-sm px-3 py-1 bg-primary text-white rounded-md"
+                        >
+                            Post
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
