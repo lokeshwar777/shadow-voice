@@ -34,7 +34,7 @@ const CreatePostForm = () => {
                 description: "Your post has been published successfully.",
             });
             setIsSubmitting(false);
-            navigate('/');
+            navigate('/dashboard');
         }, 1000);
     };
 

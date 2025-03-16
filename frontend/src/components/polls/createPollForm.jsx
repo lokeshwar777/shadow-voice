@@ -75,7 +75,7 @@ const CreatePollForm = () => {
                 description: "Your poll has been published successfully.",
             });
             setIsSubmitting(false);
-            navigate('/');
+            navigate('/dashboard');
         }, 1000);
     };
 

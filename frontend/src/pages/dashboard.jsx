@@ -152,7 +152,7 @@ const Index = () => {
         <div className="app-container py-8">
             <div className="text-center max-w-2xl mx-auto mb-8 fade-in">
                 <h1 className="text-4xl font-bold mb-4">
-                    Welcome to <span className="text-primary">Shadow-Voice</span>
+                    Welcome to <span className="text-primary">ShadowVoice</span>
                 </h1>
                 <p className="text-muted-foreground text-lg">
                     Share your thoughts anonymously or publicly, create polls, and get AI-powered insights.
