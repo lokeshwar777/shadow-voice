@@ -3,18 +3,51 @@ import { useState } from "react";
 export default function LandingPage() {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+    const [signupData, setSignupData] = useState({
+        name: "",
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
+    });
+    const [loginData, setLoginData] = useState({
+        usernameOrEmail: "",
+        password: ""
+    });
     const [passwordError, setPasswordError] = useState("");
+    const [emailError, setEmailError] = useState("");
+
+    const validateEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+    const handleSignupChange = (e) => {
+        setSignupData({ ...signupData, [e.target.name]: e.target.value });
+    };
+
+    const handleLoginChange = (e) => {
+        setLoginData({ ...loginData, [e.target.name]: e.target.value });
+    };
 
     const handleSignupSubmit = (e) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
+        if (!validateEmail(signupData.email)) {
+            setEmailError("Invalid email format");
+            return;
+        }
+        setEmailError("");
+
+        if (signupData.password !== signupData.confirmPassword) {
             setPasswordError("Passwords do not match");
             return;
         }
         setPasswordError("");
-        // Proceed with signup logic
+        // Send signupData to backend API
+    };
+
+    const handleLoginSubmit = (e) => {
+        e.preventDefault();
+        // Send loginData to backend API
     };
 
     return (
@@ -46,9 +79,10 @@ export default function LandingPage() {
                 </button>
             </header>
 
+           
 
-            {/* Features Section */}
-            <section className="py-16 text-center bg-gray-50">
+           {/* Features Section */}
+               <section className="py-16 text-center bg-gray-50">
                 <h2 className="text-3xl font-bold">Why Choose ShadowVoice?</h2>
                 <p className="text-gray-600 mt-2">Our platform is designed with privacy and expression in mind.</p>
 
@@ -64,7 +98,7 @@ export default function LandingPage() {
             <section className="py-16 text-center bg-white shadow-md mx-4 md:mx-0 rounded-lg">
                 <h2 className="text-2xl font-bold">Ready to find your voice?</h2>
                 <p className="text-gray-600 mt-2 max-w-lg mx-auto">
-                    Join thousands of people who are already expressing themselves freely and getting honest feedback on ShadowVoice.
+                    Join the community and Start expressing your thoughts freely and participate in meaningful discussions.
                 </p>
                 <button 
                     className="mt-6 px-6 py-3 bg-blue-700 text-white rounded-lg text-lg font-medium hover:bg-blue-600"
@@ -73,6 +107,7 @@ export default function LandingPage() {
                     Create an account
                 </button>
             </section>
+
 
             {/* Login Modal */}
             {showLogin && (
@@ -85,20 +120,17 @@ export default function LandingPage() {
                             &times;
                         </button>
                         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
-                        <form className="space-y-4">
+                        <form className="space-y-4" onSubmit={handleLoginSubmit}>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Email</label>
-                                <input type="email" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required />
+                                <label className="block text-gray-600 text-sm mb-1">Username or Email</label>
+                                <input type="text" name="usernameOrEmail" value={loginData.usernameOrEmail} onChange={handleLoginChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username or email" required />
                             </div>
                             <div>
                                 <label className="block text-gray-600 text-sm mb-1">Password</label>
-                                <input type="password" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required />
+                                <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required />
                             </div>
                             <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Login</button>
                         </form>
-                        <p className="text-center text-sm text-gray-500 mt-4">
-                            Don't have an account? <a href="#" className="text-blue-500 hover:underline" onClick={() => { setShowLogin(false); setShowSignup(true); }}>Sign Up</a>
-                        </p>
                     </div>
                 </div>
             )}
@@ -116,41 +148,36 @@ export default function LandingPage() {
                         <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
                         <form className="space-y-4" onSubmit={handleSignupSubmit}>
                             <div>
+                                <label className="block text-gray-600 text-sm mb-1">Name</label>
+                                <input type="text" name="name" value={signupData.name} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your full name" required />
+                            </div>
+                            <div>
+                                <label className="block text-gray-600 text-sm mb-1">Username</label>
+                                <input type="text" name="username" value={signupData.username} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Choose a username" required />
+                            </div>
+                            <div>
                                 <label className="block text-gray-600 text-sm mb-1">Email</label>
-                                <input type="email" className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required />
+                                <input type="email" name="email" value={signupData.email} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required />
+                                {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
                             </div>
                             <div>
                                 <label className="block text-gray-600 text-sm mb-1">Password</label>
-                                <input 
-                                    type="password" 
-                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                    placeholder="Enter your password" 
-                                    required 
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <input type="password" name="password" value={signupData.password} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required />
                             </div>
                             <div>
                                 <label className="block text-gray-600 text-sm mb-1">Confirm Password</label>
-                                <input 
-                                    type="password" 
-                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                                    placeholder="Confirm your password" 
-                                    required 
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                />
+                                <input type="password" name="confirmPassword" value={signupData.confirmPassword} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password" required />
                                 {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
                             </div>
                             <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Sign Up</button>
                         </form>
-                        <p className="text-center text-sm text-gray-500 mt-4">
-                            Already have an account? <a href="#" className="text-blue-500 hover:underline" onClick={() => { setShowSignup(false); setShowLogin(true); }}>Login</a>
-                        </p>
                     </div>
                 </div>
             )}
         </div>
     );
 }
+
 
 // Feature Card Component
 function FeatureCard({ title, desc, icon }) {
