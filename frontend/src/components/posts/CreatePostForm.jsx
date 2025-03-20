@@ -1,8 +1,9 @@
+import axios from 'axios';
+import { User } from 'lucide-react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
 import UserAvatar from '../../components/ui/UserAvatar';
-import { User } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/use-toast';
 
 const CreatePostForm = () => {
@@ -13,36 +14,49 @@ const CreatePostForm = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
     const [aiOpinion, setAiOpinion] = useState('');
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!content.trim()) {
             toast({
-                title: "Cannot create post",
-                description: "Please enter some content for your post.",
-                variant: "destructive",
+                title: 'Cannot create post',
+                description: 'Please enter some content for your post.',
+                variant: 'destructive',
             });
             return;
         }
 
         setIsSubmitting(true);
 
-        // Simulated API call
-        setTimeout(() => {
+        const newPost = {
+            content,
+            isAnonymous,
+            author: isAnonymous ? null : user,
+        };
+
+        try {
+            await axios.post('/api/posts', newPost);
             toast({
-                title: "Post created",
-                description: "Your post has been published successfully.",
+                title: 'Post created',
+                description: 'Your post has been created successfully.',
             });
-            setIsSubmitting(false);
             navigate('/dashboard');
-        }, 1000);
+        } catch (error) {
+            toast({
+                title: 'An error occurred',
+                description: 'Failed to create post. Please try again.',
+                variant: 'destructive',
+            });
+            console.log(`Error: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleCancel = () => {
         navigate(-1);
     };
-
-   
 
     return (
         <div className="animate-fadeIn">
@@ -60,21 +74,42 @@ const CreatePostForm = () => {
                             )}
                         </div>
                         <div>
-                            <p className="font-medium">{isAnonymous ? 'Anonymous' : user?.name}</p>
+                            <p className="font-medium">
+                                {isAnonymous ? 'Anonymous' : user?.name}
+                            </p>
                             <div className="flex items-center gap-2 mt-1">
-                                <label htmlFor="anonymous-toggle" className="flex items-center gap-2 cursor-pointer">
+                                <label
+                                    htmlFor="anonymous-toggle"
+                                    className="flex items-center gap-2 cursor-pointer"
+                                >
                                     <div className="relative">
                                         <input
                                             type="checkbox"
                                             id="anonymous-toggle"
                                             className="sr-only"
                                             checked={isAnonymous}
-                                            onChange={() => setIsAnonymous(!isAnonymous)}
+                                            onChange={() =>
+                                                setIsAnonymous(!isAnonymous)
+                                            }
                                         />
-                                        <div className={`block w-10 h-6 rounded-full transition-colors ${isAnonymous ? 'bg-primary' : 'bg-muted'}`}></div>
-                                        <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${isAnonymous ? 'translate-x-4' : 'translate-x-0'}`}></div>
+                                        <div
+                                            className={`block w-10 h-6 rounded-full transition-colors ${
+                                                isAnonymous
+                                                    ? 'bg-primary'
+                                                    : 'bg-muted'
+                                            }`}
+                                        ></div>
+                                        <div
+                                            className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                                                isAnonymous
+                                                    ? 'translate-x-4'
+                                                    : 'translate-x-0'
+                                            }`}
+                                        ></div>
                                     </div>
-                                    <span className="text-xs text-muted-foreground">Post anonymously</span>
+                                    <span className="text-xs text-muted-foreground">
+                                        Post anonymously
+                                    </span>
                                 </label>
                             </div>
                         </div>
@@ -91,10 +126,12 @@ const CreatePostForm = () => {
                             type="button"
                             onClick={() => {
                                 // Simulated AI opinion call
-                                const opinion = content ? `AI thinks your post is great!` : "Please enter some content for AI opinion.";
+                                const opinion = content
+                                    ? `AI thinks your post is great!`
+                                    : 'Please enter some content for AI opinion.';
                                 setAiOpinion(opinion);
                                 toast({
-                                    title: "AI Opinion",
+                                    title: 'AI Opinion',
                                     description: opinion,
                                 });
                             }}

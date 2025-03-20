@@ -1,61 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import PostCard from '../components/posts/PostCard';
 import { Search } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import PostCard from '../components/posts/PostCard';
+import useAxiosFetch from '../hooks/useAxiosFetch';
 
 const Posts = () => {
     const [posts, setPosts] = useState([]);
     const [filteredPosts, setFilteredPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const [data, isLoading, fetchError] = useAxiosFetch('/api/posts');
 
     useEffect(() => {
-        setTimeout(() => {
-            const mockPosts = [
-                {
-                    id: '1',
-                    content: "I just launched a new project and I'm really excited about it! What do you think?",
-                    authorId: '1',
-                    author: {
-                        id: '1',
-                        name: 'John Doe',
-                        username: 'johndoe',
-                        email: 'john@example.com',
-                        image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
-                    },
-                    isAnonymous: false,
-                    likes: 15,
-                    comments: 2,
-                },
-                {
-                    id: '2',
-                    content: "Sometimes I feel like I'm not making enough progress in my career. Does anyone else feel this way?",
-                    authorId: '2',
-                    author: {
-                        id: '2',
-                        name: 'Jane Smith',
-                        username: 'janesmith',
-                        email: 'jane@example.com',
-                        image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane',
-                    },
-                    isAnonymous: true,
-                    likes: 42,
-                    comments: 7,
-                },
-            ];
-
-            setPosts(mockPosts);
-            setFilteredPosts(mockPosts);
-            setIsLoading(false);
-        }, 1000);
-    }, []);
+        // console.log('data', data);
+        setPosts(data || []);
+    }, [data]);
 
     useEffect(() => {
         if (searchQuery.trim() === '') {
             setFilteredPosts(posts);
         } else {
-            const filtered = posts.filter(post =>
-                post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (!post.isAnonymous && post.author?.name.toLowerCase().includes(searchQuery.toLowerCase()))
+            const filtered = posts.filter(
+                (post) =>
+                    post.content
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase()) ||
+                    (!post.isAnonymous &&
+                        post.author?.name
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase()))
             );
             setFilteredPosts(filtered);
         }
@@ -70,7 +41,7 @@ const Posts = () => {
         }
         return (
             <div>
-                {filteredPosts.map(post => (
+                {filteredPosts.map((post) => (
                     <PostCard key={post.id} post={post} />
                 ))}
             </div>
