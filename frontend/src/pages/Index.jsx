@@ -136,6 +136,9 @@ export default function LandingPage() {
                             </div>
                             <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Login</button>
                         </form>
+                        <p className="text-center text-sm text-gray-500 mt-4">
+                    Don't have an account? <span className="text-blue-500 hover:underline cursor-pointer" onClick={() => router.push('/signup')}>Sign Up</span>
+                    </p>
                     </div>
                 </div>
             )}
@@ -176,6 +179,9 @@ export default function LandingPage() {
                             </div>
                             <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Sign Up</button>
                         </form>
+                        <p className="text-center text-sm text-gray-500 mt-4">
+                    Already have an account? <span className="text-blue-500 hover:underline cursor-pointer" onClick={() => router.push('/login')}>Login</span>
+                </p>
                     </div>
                 </div>
             )}
