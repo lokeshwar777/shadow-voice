@@ -1,6 +1,7 @@
 import { useState } from "react";
-
+import { useAuth } from "../contexts/AuthContext";
 export default function LandingPage() {
+    const { login, register, isAuthenticated, user } = useAuth();
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [signupData, setSignupData] = useState({
@@ -29,7 +30,7 @@ export default function LandingPage() {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
 
-    const handleSignupSubmit = (e) => {
+    const handleSignupSubmit = async (e) => {
         e.preventDefault();
         if (!validateEmail(signupData.email)) {
             setEmailError("Invalid email format");
@@ -43,11 +44,15 @@ export default function LandingPage() {
         }
         setPasswordError("");
         // Send signupData to backend API
+        await register(signupData.email, signupData.password, signupData.name, signupData.username);
+        setShowSignup(false);
     };
 
-    const handleLoginSubmit = (e) => {
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
         // Send loginData to backend API
+        await login(loginData.email, loginData.password);
+        setShowLogin(false);
     };
 
     return (
