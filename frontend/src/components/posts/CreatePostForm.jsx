@@ -1,7 +1,8 @@
-import axios from 'axios';
 import { User } from 'lucide-react';
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useNavigate } from 'react-router-dom';
+import API from '../../api';
 import UserAvatar from '../../components/ui/UserAvatar';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/use-toast';
@@ -29,14 +30,15 @@ const CreatePostForm = () => {
 
         setIsSubmitting(true);
 
-        const newPost = {
+        const postData = {
             content,
             isAnonymous,
-            author: isAnonymous ? null : user,
         };
 
         try {
-            await axios.post('/api/posts', newPost);
+            // console.log('postData', postData);
+            const response = await API.post('/posts', postData);
+            // console.log('create response', response);
             toast({
                 title: 'Post created',
                 description: 'Your post has been created successfully.',
@@ -56,6 +58,29 @@ const CreatePostForm = () => {
 
     const handleCancel = () => {
         navigate(-1);
+    };
+
+    const handleAIOpinion = async (content) => {
+        if (!content.trim()) {
+            toast({
+                description: 'Please enter some content for AI opinion.',
+            });
+            return;
+        }
+
+        let opinion = `AI thinks your post is great!`;
+
+        const prompt = `I would like to create a post with the following content: ${content} can you give me your opinion on the post?`;
+
+        try {
+            const response = await API.post('/ai/opinion', { prompt });
+            // console.log('AI Opinion', response.data);
+            opinion = response.data.replace('\n', '\n\n');
+        } catch (error) {
+            console.log(`Error: ${error.message}`);
+        } finally {
+            setAiOpinion(opinion);
+        }
     };
 
     return (
@@ -124,27 +149,15 @@ const CreatePostForm = () => {
                         />
                         <button
                             type="button"
-                            onClick={() => {
-                                // Simulated AI opinion call
-                                const opinion = content
-                                    ? `AI thinks your post is great!`
-                                    : 'Please enter some content for AI opinion.';
-                                setAiOpinion(opinion);
-                                toast({
-                                    title: 'AI Opinion',
-                                    description: opinion,
-                                });
-                            }}
+                            onClick={() => handleAIOpinion(content)}
                             className="px-4 py-2 border rounded-md bg-grey-400 text-black  hover:bg-blue-600 hover:text-white transition-colors mt-4"
                         >
                             Get AI Opinion
                         </button>
                         {aiOpinion && (
-                            <textarea
-                                value={aiOpinion}
-                                readOnly
-                                className="w-full min-h-[100px] p-3 mt-4 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                            />
+                            <div className="w-full max-h-[200px] p-3 mt-4 rounded-md border bg-background text-foreground resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent overflow-scroll">
+                                <ReactMarkdown>{aiOpinion}</ReactMarkdown>
+                            </div>
                         )}
                         <div className="flex justify-end items-center gap-3 mt-4">
                             <button

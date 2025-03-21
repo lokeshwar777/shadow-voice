@@ -34,19 +34,28 @@ const PostCard = ({ post }) => {
         setNewComment('');
     };
 
-    const timeAgo = formatDistanceToNow(new Date(post.createdAt), { addSuffix: true });
+    const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
+        addSuffix: true,
+    });
 
     return (
         <div className="bg-card border rounded-lg overflow-hidden transition-all duration-300 card-hover animate-fadeIn">
             <div className="p-4">
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                        <UserAvatar user={post.author || null} isAnonymous={post.isAnonymous} />
+                        <UserAvatar
+                            user={post.author || null}
+                            isAnonymous={post.isAnonymous}
+                        />
                         <div>
                             <h3 className="font-medium text-card-foreground">
-                                {post.isAnonymous ? 'Anonymous' : post.author?.name}
+                                {post.isAnonymous
+                                    ? 'Anonymous'
+                                    : post.author?.name}
                             </h3>
-                            <p className="text-xs text-muted-foreground">{timeAgo}</p>
+                            <p className="text-xs text-muted-foreground">
+                                {timeAgo}
+                            </p>
                         </div>
                     </div>
                     <button className="text-muted-foreground hover:text-foreground rounded-full p-1 transition-colors">
@@ -64,11 +73,16 @@ const PostCard = ({ post }) => {
                 <button
                     onClick={handleLike}
                     className={cn(
-                        "flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-colors",
-                        liked ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        'flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-md transition-colors',
+                        liked
+                            ? 'text-primary'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                     )}
                 >
-                    <ThumbsUp size={16} className={liked ? "fill-primary" : ""} />
+                    <ThumbsUp
+                        size={16}
+                        className={liked ? 'fill-primary' : ''}
+                    />
                     <span>{likeCount}</span>
                 </button>
 
@@ -93,13 +107,20 @@ const PostCard = ({ post }) => {
                     <div className="space-y-2">
                         {comments.length > 0 ? (
                             comments.map((comment) => (
-                                <div key={comment.id} className="bg-muted p-2 rounded-md">
-                                    <p className="text-xs font-semibold">{comment.author}</p>
+                                <div
+                                    key={comment.id}
+                                    className="bg-muted p-2 rounded-md"
+                                >
+                                    <p className="text-xs font-semibold">
+                                        {comment.author}
+                                    </p>
                                     <p className="text-sm">{comment.text}</p>
                                 </div>
                             ))
                         ) : (
-                            <p className="text-xs text-muted-foreground">No comments yet.</p>
+                            <p className="text-xs text-muted-foreground">
+                                No comments yet.
+                            </p>
                         )}
                     </div>
 

@@ -1,21 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function LandingPage() {
     const [showLogin, setShowLogin] = useState(false);
     const [showSignup, setShowSignup] = useState(false);
     const [signupData, setSignupData] = useState({
-        name: "",
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
+        name: '',
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
     });
     const [loginData, setLoginData] = useState({
-        usernameOrEmail: "",
-        password: ""
+        usernameOrEmail: '',
+        password: '',
     });
-    const [passwordError, setPasswordError] = useState("");
-    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const navigate = useNavigate();
+    const { user, login, register } = useAuth();
+
+    useEffect(() => {}, [user]);
 
     const validateEmail = (email) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -29,107 +35,200 @@ export default function LandingPage() {
         setLoginData({ ...loginData, [e.target.name]: e.target.value });
     };
 
-    const handleSignupSubmit = (e) => {
+    const handleSignupSubmit = async (e) => {
         e.preventDefault();
         if (!validateEmail(signupData.email)) {
-            setEmailError("Invalid email format");
+            setEmailError('Invalid email format');
             return;
         }
-        setEmailError("");
+        setEmailError('');
 
         if (signupData.password !== signupData.confirmPassword) {
-            setPasswordError("Passwords do not match");
+            setPasswordError('Passwords do not match');
             return;
         }
-        setPasswordError("");
-        // Send signupData to backend API
+        setPasswordError('');
+
+        const response = await register(signupData);
+        // console.log('signup response', response);
+        if (response) {
+            navigate('/dashboard');
+        }
     };
 
-    const handleLoginSubmit = (e) => {
+    const handleLoginSubmit = async (e) => {
         e.preventDefault();
-        // Send loginData to backend API
+
+        const response = await login(loginData);
+        if (response) {
+            navigate('/dashboard');
+        }
     };
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900">
             {/* Navbar */}
             <nav className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
-                <h1 className="text-xl font-bold text-blue-600">Shadow<span className="text-xl font-bold text-blue-400">Voice</span></h1>
-                <button 
-                    className="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-600"
-                    onClick={() => setShowLogin(true)}
-                >
-                    Login
-                </button>
+                <h1 className="text-xl font-bold text-blue-600">
+                    Shadow
+                    <span className="text-xl font-bold text-blue-400">
+                        Voice
+                    </span>
+                </h1>
+                {!user && (
+                    <button
+                        className="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-600"
+                        onClick={() => setShowLogin(true)}
+                    >
+                        Login
+                    </button>
+                )}
             </nav>
 
             {/* Hero Section */}
             <header className="text-center py-16 bg-white shadow-sm">
-                <span className="bg-blue-200 text-black-700 px-3 py-1 rounded-full text-sm font-medium">Welcome to ShadowVoice</span>
-                <h1 className="text-4xl font-bold mt-2">Where your voice is heard, <br/> not your identity</h1>
+                <span className="bg-blue-200 text-black-700 px-3 py-1 rounded-full text-sm font-medium">
+                    Welcome to ShadowVoice
+                </span>
+                <h1 className="text-4xl font-bold mt-2">
+                    Where your voice is heard, <br /> not your identity
+                </h1>
                 <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-                    An anonymous social platform where you can freely express your thoughts, create polls, and receive
-                    honest feedback without revealing who you are.
+                    An anonymous social platform where you can freely express
+                    your thoughts, create polls, and receive honest feedback
+                    without revealing who you are.
                 </p>
-                <button 
+                <button
                     className="mt-6 px-6 py-3 bg-blue-700 text-white rounded-lg text-lg font-medium hover:bg-blue-600"
-                    onClick={() => setShowSignup(true)}
+                    onClick={() => {
+                        if (user) {
+                            navigate('/dashboard');
+                        } else {
+                            setShowSignup(true);
+                        }
+                    }}
                 >
                     Get Started →
                 </button>
             </header>
 
-           
-
-           {/* Features Section */}
-               <section className="py-16 text-center bg-gray-50">
+            {/* Features Section */}
+            <section className="py-16 text-center bg-gray-50">
                 <h2 className="text-3xl font-bold">Why Choose ShadowVoice?</h2>
-                <p className="text-gray-600 mt-2">Our platform is designed with privacy and expression in mind.</p>
+                <p className="text-gray-600 mt-2">
+                    Our platform is designed with privacy and expression in
+                    mind.
+                </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 max-w-4xl mx-auto">
-                    <FeatureCard title="Share Your Thoughts" desc="Create posts and express yourself without fear of judgment." icon="💬" />
-                    <FeatureCard title="Private & Secure" desc="Your identity is protected unless you choose to reveal it." icon="🔒" />
-                    <FeatureCard title="Get Honest Feedback" desc="Create polls and gather genuine opinions from the community." icon="👁️" />
-                    <FeatureCard title="Stay Anonymous" desc="Toggle between anonymous and public modes for each interaction." icon="👤" />
+                    <FeatureCard
+                        title="Share Your Thoughts"
+                        desc="Create posts and express yourself without fear of judgment."
+                        icon="💬"
+                    />
+                    <FeatureCard
+                        title="Private & Secure"
+                        desc="Your identity is protected unless you choose to reveal it."
+                        icon="🔒"
+                    />
+                    <FeatureCard
+                        title="Get Honest Feedback"
+                        desc="Create polls and gather genuine opinions from the community."
+                        icon="👁️"
+                    />
+                    <FeatureCard
+                        title="Stay Anonymous"
+                        desc="Toggle between anonymous and public modes for each interaction."
+                        icon="👤"
+                    />
                 </div>
             </section>
 
             {/* Call to Action */}
-            <section className="py-16 text-center bg-white shadow-md mx-4 md:mx-0 rounded-lg">
-                <h2 className="text-2xl font-bold">Ready to find your voice?</h2>
-                <p className="text-gray-600 mt-2 max-w-lg mx-auto">
-                    Join the community and Start expressing your thoughts freely and participate in meaningful discussions.
-                </p>
-                <button 
-                    className="mt-6 px-6 py-3 bg-blue-700 text-white rounded-lg text-lg font-medium hover:bg-blue-600"
-                    onClick={() => setShowSignup(true)}
-                >
-                    Create an account
-                </button>
-            </section>
-
+            {!user && (
+                <section className="py-16 text-center bg-white shadow-md mx-4 md:mx-0 rounded-lg">
+                    <h2 className="text-2xl font-bold">
+                        Ready to find your voice?
+                    </h2>
+                    <p className="text-gray-600 mt-2 max-w-lg mx-auto">
+                        Join the community and Start expressing your thoughts
+                        freely and participate in meaningful discussions.
+                    </p>
+                    <button
+                        className="mt-6 px-6 py-3 bg-blue-700 text-white rounded-lg text-lg font-medium hover:bg-blue-600"
+                        onClick={() => setShowSignup(true)}
+                    >
+                        Create an account
+                    </button>
+                </section>
+            )}
 
             {/* Login Modal */}
             {showLogin && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
                     <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md relative">
-                        <button 
+                        <button
                             className="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-2xl"
                             onClick={() => setShowLogin(false)}
                         >
                             &times;
                         </button>
-                        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
-                        <form className="space-y-4" onSubmit={handleLoginSubmit}>
+                        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                            Login
+                        </h2>
+                        <form
+                            className="space-y-4"
+                            onSubmit={handleLoginSubmit}
+                        >
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Username or Email</label>
-                                <input type="text" name="usernameOrEmail" value={loginData.usernameOrEmail} onChange={handleLoginChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your username or email" required />
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Username or Email
+                                </label>
+                                <input
+                                    type="text"
+                                    name="usernameOrEmail"
+                                    value={loginData.usernameOrEmail}
+                                    onChange={handleLoginChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your username or email"
+                                    required
+                                />
                             </div>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Password</label>
-                                <input type="password" name="password" value={loginData.password} onChange={handleLoginChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required />
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={loginData.password}
+                                    onChange={handleLoginChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your password"
+                                    required
+                                />
                             </div>
-                            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Login</button>
+                            <div className="flex items-center justify-center">
+                                <p className="text-gray-600 text-md px-1">
+                                    Don't have an account?
+                                </p>
+                                <button
+                                    type="button"
+                                    className="text-blue-600 hover:underline ml-1"
+                                    onClick={() => {
+                                        setShowLogin(false);
+                                        setShowSignup(true);
+                                    }}
+                                >
+                                    Sign Up
+                                </button>
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                            >
+                                Login
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -139,37 +238,122 @@ export default function LandingPage() {
             {showSignup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
                     <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md relative">
-                        <button 
+                        <button
                             className="absolute top-3 right-3 text-gray-600 hover:text-red-500 text-2xl"
                             onClick={() => setShowSignup(false)}
                         >
                             &times;
                         </button>
-                        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
-                        <form className="space-y-4" onSubmit={handleSignupSubmit}>
+                        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                            Sign Up
+                        </h2>
+                        <form
+                            className="space-y-4"
+                            onSubmit={handleSignupSubmit}
+                        >
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Name</label>
-                                <input type="text" name="name" value={signupData.name} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your full name" required />
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Name
+                                </label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={signupData.name}
+                                    onChange={handleSignupChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your full name"
+                                    required
+                                />
                             </div>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Username</label>
-                                <input type="text" name="username" value={signupData.username} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Choose a username" required />
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Username
+                                </label>
+                                <input
+                                    type="text"
+                                    name="username"
+                                    value={signupData.username}
+                                    onChange={handleSignupChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Choose a username"
+                                    required
+                                />
                             </div>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Email</label>
-                                <input type="email" name="email" value={signupData.email} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" required />
-                                {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={signupData.email}
+                                    onChange={handleSignupChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your email"
+                                    required
+                                />
+                                {emailError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {emailError}
+                                    </p>
+                                )}
                             </div>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Password</label>
-                                <input type="password" name="password" value={signupData.password} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" required />
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Password
+                                </label>
+                                <input
+                                    type="password"
+                                    name="password"
+                                    value={signupData.password}
+                                    onChange={handleSignupChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter your password"
+                                    required
+                                />
                             </div>
                             <div>
-                                <label className="block text-gray-600 text-sm mb-1">Confirm Password</label>
-                                <input type="password" name="confirmPassword" value={signupData.confirmPassword} onChange={handleSignupChange} className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password" required />
-                                {passwordError && <p className="text-red-500 text-sm mt-1">{passwordError}</p>}
+                                <label className="block text-gray-600 text-sm mb-1">
+                                    Confirm Password
+                                </label>
+                                <input
+                                    type="password"
+                                    name="confirmPassword"
+                                    value={signupData.confirmPassword}
+                                    onChange={handleSignupChange}
+                                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Confirm your password"
+                                    required
+                                />
+                                {passwordError && (
+                                    <p className="text-red-500 text-sm mt-1">
+                                        {passwordError}
+                                    </p>
+                                )}
                             </div>
-                            <button type="submit" className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition">Sign Up</button>
+                            <div className="flex items-center justify-center">
+                                <p className="text-gray-600 text-md px-1">
+                                    Already have an account?
+                                </p>
+                                <button
+                                    type="button"
+                                    className="text-blue-600 hover:underline ml-1"
+                                    onClick={() => {
+                                        setShowSignup(false);
+                                        setShowLogin(true);
+                                    }}
+                                >
+                                    Login
+                                </button>
+                            </div>
+                            <div>
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition"
+                                >
+                                    Sign Up
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -177,7 +361,6 @@ export default function LandingPage() {
         </div>
     );
 }
-
 
 // Feature Card Component
 function FeatureCard({ title, desc, icon }) {

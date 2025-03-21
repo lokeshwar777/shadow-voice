@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+import mongoose, { Schema } from 'mongoose';
+// import mongooseAggregatePaginate from 'mongoose-aggregate-paginate-v2';
 
 const commentSchema = new Schema(
     {
@@ -9,7 +9,7 @@ const commentSchema = new Schema(
         },
         author: {
             type: Schema.Types.ObjectId,
-            ref: "User",
+            ref: 'User',
         },
         isAnonymous: {
             type: Boolean,
@@ -17,12 +17,12 @@ const commentSchema = new Schema(
         },
         postId: {
             type: [Schema.Types.ObjectId],
-            ref: "Post",
+            ref: 'Post',
         },
     },
     { timestamps: true }
 );
 
-commentSchema.plugin(mongooseAggregatePaginate);
+// commentSchema.plugin(mongooseAggregatePaginate);
 
-export const User = mongoose.model("Comment", commentSchema);
+export const Comment = mongoose.model('Comment', commentSchema);

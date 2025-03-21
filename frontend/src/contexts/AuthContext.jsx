@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import API from '../api/';
 import { useToast } from '../hooks/use-toast';
 
 const AuthContext = createContext(undefined);
@@ -18,30 +18,31 @@ export const AuthProvider = ({ children }) => {
     const { toast } = useToast();
 
     useEffect(() => {
-        setTimeout(() => {
-            const mockUser = {
-                id: '1',
-                name: 'John Doe',
-                username: 'johndoe',
-                email: 'john@example.com',
-                createdAt: new Date(),
-                image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
-            };
-            setUser(mockUser);
-            setIsLoading(false);
-        }, 1000);
+        const fetchUser = async () => {
+            setIsLoading(true);
+            try {
+                const res = await API.get('/users/me');
+                setUser(res?.data || null);
+            } catch (error) {
+                console.log(`Error fetching user: ${error}`);
+                setUser(null);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchUser();
     }, []);
 
-    const login = async (usernameOrEmail, password) => {
-        const userData = { usernameOrEmail, password };
+    const login = async (loginData) => {
         try {
             setIsLoading(true);
-            const response = await axios.post('/api/auth/login', userData);
-            setUser(response.data);
+            const response = await API.post('/users/login', loginData);
+            setUser(response.data.user);
             toast({
                 title: 'Login successful',
                 description: 'Welcome back!',
             });
+            return response.data.success;
         } catch (error) {
             toast({
                 title: 'Login failed',
@@ -53,28 +54,18 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const register = async (
-        name,
-        username,
-        email,
-        password,
-        confirmPassword
-    ) => {
+    const register = async (signupData) => {
         try {
             setIsLoading(true);
-            const mockUser = {
-                id: '1',
-                name: name,
-                username: username,
-                email: email,
-                createdAt: new Date(),
-                image: `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
-            };
-            setUser(mockUser);
+            const response = await API.post('/users/register', signupData);
+            setUser(response.data.user);
+
             toast({
                 title: 'Registration successful',
                 description: 'Your account has been created.',
             });
+            // console.log('register response', response);
+            return response.data.success;
         } catch (error) {
             toast({
                 title: 'Registration failed',
@@ -89,16 +80,18 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             setIsLoading(true);
+            const response = await API.post('/users/logout');
             setUser(null);
             toast({
                 title: 'Logged out',
                 description: 'You have been successfully logged out.',
             });
+            // console.log('logout response', response);
+            return response.data.success;
         } catch (error) {
             toast({
                 title: 'Logout failed',
                 description: 'An error occurred during logout.',
-                variant: 'destructive',
             });
         } finally {
             setIsLoading(false);

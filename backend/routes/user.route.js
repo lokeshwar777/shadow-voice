@@ -13,5 +13,8 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/logout', authenticateUser, logoutUser);
 router.post('/refresh-token', refreshAccessToken);
+router.get('/me', authenticateUser, (req, res) => {
+    res.json(req?.user || null);
+});
 
 export default router;
