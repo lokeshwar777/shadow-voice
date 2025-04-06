@@ -17,8 +17,9 @@ const postSchema = new Schema(
             default: false,
         },
         likes: {
-            type: Number,
-            default: 0,
+            type: [Schema.Types.ObjectId], // Array of user IDs so users cannot like multiple times
+            ref: 'User',
+            default: [],
         },
         comments: {
             type: [Schema.Types.ObjectId],

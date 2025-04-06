@@ -8,6 +8,7 @@ import { authenticateUser } from './middlewares/auth.middleware.js';
 import pollRoute from './routes/poll.route.js';
 import postRoute from './routes/post.route.js';
 import userRoute from './routes/user.route.js';
+import commentRoute from './routes/comment.route.js';
 
 const app = express();
 
@@ -33,6 +34,7 @@ apiRouter.use('/users', userRoute);
 apiRouter.use(authenticateUser);
 apiRouter.use('/posts', postRoute);
 apiRouter.use('/polls', pollRoute);
+apiRouter.use('/comments', commentRoute);
 apiRouter.post('/ai/opinion', getAIOpinion);
 
 app.use('/api', apiRouter);

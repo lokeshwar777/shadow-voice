@@ -6,32 +6,40 @@ import { cn } from '../../lib/utils';
 
 const PostCard = ({ post }) => {
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(post.likes || 0);
+    const [likeCount, setLikeCount] = useState(post.likes.length || 0);
     const [showComments, setShowComments] = useState(false);
     const [comments, setComments] = useState(post.comments || []);
     const [newComment, setNewComment] = useState('');
 
-    const handleLike = () => {
-        setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-        setLiked(!liked);
+    const handleLike = async () => {
+        try {
+            const response = await API.patch(`/posts/${post.id}/like`);
+            setLikeCount(response.data.likes);
+            setLiked(!liked);
+        } catch (error) {
+            console.error('Error toggling like:', error);
+        }
     };
 
     const toggleComments = () => {
         setShowComments((prev) => !prev);
     };
 
-    const handleCommentSubmit = () => {
+    const handleCommentSubmit = async () => {
         if (newComment.trim() === '') return;
-
-        const commentData = {
-            id: comments.length + 1,
-            author: post.isAnonymous ? 'Anonymous' : post.author?.name,
-            text: newComment.trim(),
-            createdAt: new Date().toISOString(),
-        };
-
-        setComments([...comments, commentData]);
-        setNewComment('');
+    
+        try {
+            const response = await API.post('/api/comments', {
+                postId: post.id,
+                content: newComment,
+                isAnonymous: post.isAnonymous,
+            });
+    
+            setComments([...comments, response.data.comment]);
+            setNewComment('');
+        } catch (error) {
+            console.error('Error adding comment:', error);
+        }
     };
 
     const timeAgo = formatDistanceToNow(new Date(post.createdAt), {

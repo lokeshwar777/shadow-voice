@@ -111,4 +111,37 @@ const deletePost = async (req, res) => {
     }
 };
 
-export { createPost, deletePost, getAllPosts, getPostById, updatePost };
+const toggleLike = async (req, res) => {
+    const { postId } = req.params;
+    const userId = req.user.id; // Assuming user is authenticated
+
+    try {
+        const post = await Post.findById(postId);
+
+        if (!post) {
+            return res.status(404).json({ success: false, message: 'Post not found' });
+        }
+
+        // Check if the user already liked the post
+        const hasLiked = post.likes.includes(userId);
+
+        if (hasLiked) {
+            // Unlike the post
+            post.likes = post.likes.filter((id) => id.toString() !== userId);
+        } else {
+            // Like the post
+            post.likes.push(userId);
+        }
+
+        await post.save();
+
+        res.status(200).json({
+            success: true,
+            message: hasLiked ? 'Post unliked' : 'Post liked',
+            likes: post.likes.length,
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+export { createPost, deletePost, getAllPosts, getPostById, updatePost, toggleLike };
