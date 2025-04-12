@@ -24,6 +24,12 @@ const pollSchema = new Schema(
         },
         options: [
             {
+                index: {
+                    type: Number,
+                    required: true,
+                    index: true,
+                    unique: true,
+                },
                 text: {
                     type: String,
                     required: true,
@@ -37,9 +43,15 @@ const pollSchema = new Schema(
         ],
         voters: [
             {
-                type: Schema.Types.ObjectId,
-                ref: 'User',
+                User: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'User',
+                },
+                option: {
+                    type: Number,
+                },
             },
+
         ],
     },
     { timestamps: true }

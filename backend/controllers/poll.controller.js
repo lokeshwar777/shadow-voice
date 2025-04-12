@@ -83,15 +83,39 @@ export const votePoll = async (req, res) => {
         if (optionIndex < 0 || optionIndex >= poll.options.length) {
             return res.status(400).json({ message: 'Invalid option selected' });
         }
+        // Check if the user has already voted
+        const voter = poll.voters.find(
+            (voter) => voter.User?.toString() === req.user.id
+        );
+        if (voter) {
+            // User has already voted, update their vote
+            const previousOptionIndex = voter.option;
 
-        if (poll.voters.includes(req.user.id)) {
-            return res.status(400).json({ message: 'You have already voted' });
+            if (previousOptionIndex === optionIndex) {
+                return res
+                    .status(400)
+                    .json({ message: 'You have already voted for this option' });
+            }
+            // Decrement vote count for the previous option
+            if (typeof previousOptionIndex === 'number' && previousOptionIndex >= 0 && previousOptionIndex < poll.options.length) {
+                poll.options[previousOptionIndex].votes -= 1;
+            }
+
+            // Update the voter's selected option
+            voter.option = optionIndex;
+        } else {
+            // User has not voted yet, add their vote
+            poll.voters.push({ User: req.user.id, option: optionIndex });
         }
 
+        // Increment vote count for the new option
         poll.options[optionIndex].votes += 1;
-        poll.totalVotes += 1;
-        poll.voters.push(req.user.id);
+
+        // Update total votes
+        poll.totalVotes = poll.options.reduce((sum, option) => sum + option.votes, 0);
+
         await poll.save();
+
         res.status(200).json({ message: 'Vote recorded', poll });
     } catch (error) {
         res.status(500).json({ message: error.message });
