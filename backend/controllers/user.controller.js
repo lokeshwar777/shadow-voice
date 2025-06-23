@@ -85,14 +85,14 @@ const loginUser = async (req, res) => {
             httpOnly: true, // Prevents JavaScript access (more secure)
             secure: true, // Only sent over HTTPS (production only)
             sameSite: 'Strict', // Prevents CSRF attacks
-            maxAge: 15 * 60 * 1000, // 15 mins
+            // maxAge: 15 * 60 * 1000, // 15 mins
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
         // console.log('Login : Set-Cookie Headers:', res.getHeaders());
@@ -111,13 +111,13 @@ const logoutUser = async (req, res) => {
         httpOnly: true, // Prevents JavaScript access (more secure)
         secure: true, // Only sent over HTTPS (production only)
         sameSite: 'Strict', // Prevents CSRF attacks
-        maxAge: 15 * 60 * 1000, // 15 mins
+        // maxAge: 15 * 60 * 1000, // 15 mins
     });
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: true,
         sameSite: 'Strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     await User.findByIdAndUpdate(
         req.user._id,
@@ -169,14 +169,14 @@ const refreshAccessToken = async (req, res, next) => {
             httpOnly: true, // Prevents JavaScript access (more secure)
             secure: true, // Only sent over HTTPS (production only)
             sameSite: 'Strict', // Prevents CSRF attacks
-            maxAge: 15 * 60 * 1000, // 15 mins
+            // maxAge: 15 * 60 * 1000, // 15 mins
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'Strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+            // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
         res.status(200).json({ message: 'Access token refreshed' });

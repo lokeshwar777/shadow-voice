@@ -22,6 +22,7 @@ connectDB()
     })
     .catch((err) => {
         console.log(`MONGODB connection failed, here's the error ${err}`);
+        process.exit(1);
     });
 
 // app.use(cors(corsOptions));
