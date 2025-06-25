@@ -1,0 +1,22 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: shadow-voice-backend
+    env_file: ./backend/.env
+    networks:
+      - shadow-voice-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: shadow-voice-frontend
+    ports:
+      - '5173:80'
+    depends_on:
+      - backend
+    networks:
+      - shadow-voice-net
+
+networks:
+  shadow-voice-net:
