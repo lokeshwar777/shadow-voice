@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useNavigate } from 'react-router-dom';
 import API from '../../api';
-import UserAvatar from '../../components/ui/UserAvatar';
+import UserAvatar from '../ui/UserAvatar';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../hooks/use-toast';
 

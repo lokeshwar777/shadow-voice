@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser';
-// import cors from 'cors';
+import cors from 'cors';
 import express, { Router } from 'express';
-// import { corsOptions } from './config/corsOptions.js';
+import { corsOptions } from './config/corsOptions.js';
 import { getAIOpinion } from './ai/AIOpinion.js';
 import connectDB from './db/index.js';
 import { authenticateUser } from './middlewares/auth.middleware.js';
@@ -25,7 +25,7 @@ connectDB()
         process.exit(1);
     });
 
-// app.use(cors(corsOptions));
+// app.use(cors(corsOptions)); // skip cors temporarily
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
