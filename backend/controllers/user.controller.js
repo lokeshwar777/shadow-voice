@@ -84,14 +84,14 @@ const loginUser = async (req, res) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true, // Prevents JavaScript access (more secure)
             secure: true, // Only sent over HTTPS (production only)
-            sameSite: 'Strict', // Prevents CSRF attacks
+            sameSite: 'None', // Prevents CSRF attacks
             // maxAge: 15 * 60 * 1000, // 15 mins
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 
@@ -110,13 +110,13 @@ const logoutUser = async (req, res) => {
     res.clearCookie('accessToken', {
         httpOnly: true, // Prevents JavaScript access (more secure)
         secure: true, // Only sent over HTTPS (production only)
-        sameSite: 'Strict', // Prevents CSRF attacks
+        sameSite: 'None', // Prevents CSRF attacks
         // maxAge: 15 * 60 * 1000, // 15 mins
     });
     res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: true,
-        sameSite: 'Strict',
+        sameSite: 'None',
         // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     await User.findByIdAndUpdate(
@@ -168,14 +168,14 @@ const refreshAccessToken = async (req, res, next) => {
         res.cookie('accessToken', accessToken, {
             httpOnly: true, // Prevents JavaScript access (more secure)
             secure: true, // Only sent over HTTPS (production only)
-            sameSite: 'Strict', // Prevents CSRF attacks
+            sameSite: 'None', // Prevents CSRF attacks
             // maxAge: 15 * 60 * 1000, // 15 mins
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
-            sameSite: 'Strict',
+            sameSite: 'None',
             // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         });
 

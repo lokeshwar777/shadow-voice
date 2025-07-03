@@ -25,7 +25,8 @@ connectDB()
         process.exit(1);
     });
 
-// app.use(cors(corsOptions)); // skip cors temporarily
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // to allow preflight
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
