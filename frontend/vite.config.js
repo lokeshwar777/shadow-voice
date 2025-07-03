@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
             '/api': 'http://localhost:3000',
         },
     },
-    plugins: [react(), mode === 'development'].filter(Boolean),
+    plugins: [react()],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

@@ -9,8 +9,16 @@
 
 import axios from 'axios';
 
+const baseURL =
+    import.meta.env.MODE === 'production'
+        ? `${import.meta.env.VITE_BACKEND_URL}/api`
+        : '/api';
+
+if (import.meta.env.MODE === 'production' && !import.meta.env.VITE_BACKEND_URL)
+    throw new Error('VITE_BACKEND_URL is not set in production!');
+
 const API = axios.create({
-    baseURL: '/api', // This will be proxied to 'http://localhost:3000' in development
+    baseURL,
     withCredentials: true, // Ensures cookies (access & refresh tokens) are sent with requests
 });
 
